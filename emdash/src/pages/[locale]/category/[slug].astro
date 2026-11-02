@@ -1,0 +1,30 @@
+---
+import ArticleCard from "../../../components/ArticleCard.astro";
+import Pagination from "../../../components/Pagination.astro";
+import Base from "../../../layouts/Base.astro";
+import { cachePage, getCategory, getMenu, listArticles, PAGE_SIZE, type Hints } from "../../../lib/data";
+import { isLocale, parsePage } from "../../../lib/i18n";
+
+const { locale, slug } = Astro.params;
+if (!isLocale(locale) || !slug) return Astro.rewrite("/404");
+
+const hints: Hints = [];
+const menu = await getMenu(locale, hints);
+const category = await getCategory(locale, slug, hints);
+if (!category) return Astro.rewrite("/404");
+
+const page = parsePage(Astro.url.searchParams.get("page"));
+const totalPages = Math.ceil((category.count ?? 0) / PAGE_SIZE);
+const articles = await listArticles(locale, slug, page, undefined, hints);
+cachePage(Astro.cache, hints);
+---
+
+<Base locale={locale} menu={menu}>
+	<section class="section">
+		<h1>{category.label}</h1>
+		<div class="articles-grid">
+			{articles.map((article) => <ArticleCard locale={locale} article={article} />)}
+		</div>
+		<Pagination locale={locale} page={page} totalPages={totalPages} baseHref={`/${locale}/category/${slug}`} />
+	</section>
+</Base>

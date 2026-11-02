@@ -1,0 +1,27 @@
+---
+import ArticleCard from "../../../components/ArticleCard.astro";
+import Pagination from "../../../components/Pagination.astro";
+import Base from "../../../layouts/Base.astro";
+import { getCategory, getMenu, listArticles } from "../../../lib/data";
+import { isLocale, parsePage } from "../../../lib/i18n";
+
+const { locale, slug } = Astro.params;
+if (!isLocale(locale) || !slug) return Astro.rewrite("/404");
+
+const menu = await getMenu(locale);
+const category = await getCategory(locale, slug);
+if (!category) return Astro.rewrite("/404");
+
+// Strapi returns the total with every list, so no separate count query.
+const { items, page, totalPages } = await listArticles(locale, slug, parsePage(Astro.url.searchParams.get("page")));
+---
+
+<Base locale={locale} menu={menu}>
+	<section class="section">
+		<h1>{category.title}</h1>
+		<div class="articles-grid">
+			{items.map((article) => <ArticleCard locale={locale} article={article} />)}
+		</div>
+		<Pagination locale={locale} page={page} totalPages={totalPages} baseHref={`/${locale}/category/${slug}`} />
+	</section>
+</Base>

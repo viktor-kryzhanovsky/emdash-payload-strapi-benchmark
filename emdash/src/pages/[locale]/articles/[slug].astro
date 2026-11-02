@@ -1,0 +1,52 @@
+---
+import { PortableText } from "emdash/ui";
+
+import ArticleMeta from "../../../components/ArticleMeta.astro";
+import Base from "../../../layouts/Base.astro";
+import { cachePage, getArticle, getMenu, mediaUrl, type Hints } from "../../../lib/data";
+import { isLocale, t } from "../../../lib/i18n";
+
+const { locale, slug } = Astro.params;
+if (!isLocale(locale) || !slug) return Astro.rewrite("/404");
+
+const hints: Hints = [];
+const menu = await getMenu(locale, hints);
+const article = await getArticle(locale, slug, hints);
+if (!article) return Astro.rewrite("/404");
+cachePage(Astro.cache, hints);
+
+const { data } = article;
+const category = data.terms?.category?.[0];
+const cover = data.cover;
+const coverSrc = mediaUrl(cover);
+---
+
+<Base locale={locale} menu={menu}>
+	<article class="single-article">
+		{
+			category && (
+				<a href={`/${locale}/category/${category.slug}`} class="tag">
+					{category.label}
+				</a>
+			)
+		}
+		<h1>{data.title}</h1>
+		<ArticleMeta locale={locale} date={data.date} readingTime={data.reading_time} />
+		{coverSrc && <img class="cover" src={coverSrc} alt={cover?.alt} width={cover?.width} height={cover?.height} />}
+		{data.excerpt && <p class="lead">{data.excerpt}</p>}
+		{
+			data.body && (
+				<div class="content">
+					<PortableText value={data.body} />
+				</div>
+			)
+		}
+		{
+			data.author && (
+				<p class="author">
+					{t(locale).by} {data.author}
+				</p>
+			)
+		}
+	</article>
+</Base>

@@ -1,0 +1,46 @@
+{
+  "testid": "payload-steps-20261102-005913",
+  "cms": "payload",
+  "profile": "steps",
+  "target": "http://payload:3000",
+  "finishedAt": "2026-11-01T23:11:46.205Z",
+  "durationS": 752,
+  "requests": 43505,
+  "rps": 57.9,
+  "errorRate": 0,
+  "droppedIterations": 295,
+  "maxVUs": 321,
+  "latencyMs": {
+    "all": {
+      "p50": 12,
+      "p95": 1231,
+      "p99": 3315,
+      "max": 4363
+    },
+    "article": {
+      "p50": 9,
+      "p95": 1138,
+      "p99": 2311,
+      "max": 2666
+    },
+    "category": {
+      "p50": 13,
+      "p95": 1892,
+      "p99": 3687,
+      "max": 4363
+    },
+    "home": {
+      "p50": 14,
+      "p95": 1827,
+      "p99": 3693,
+      "max": 4359
+    },
+    "search": {
+      "p50": 12,
+      "p95": 1275,
+      "p99": 3439,
+      "max": 4356
+    }
+  },
+  "thresholdsPassed": false
+}

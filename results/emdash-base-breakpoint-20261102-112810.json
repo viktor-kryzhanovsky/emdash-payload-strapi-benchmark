@@ -1,0 +1,46 @@
+{
+  "testid": "emdash-base-breakpoint-20261102-112810",
+  "cms": "emdash",
+  "profile": "breakpoint",
+  "target": "http://emdash:3000",
+  "finishedAt": "2026-11-02T09:33:45.621Z",
+  "durationS": 334,
+  "requests": 28597,
+  "rps": 85.6,
+  "errorRate": 0,
+  "droppedIterations": 245,
+  "maxVUs": 211,
+  "latencyMs": {
+    "all": {
+      "p50": 14,
+      "p95": 544,
+      "p99": 1615,
+      "max": 2420
+    },
+    "article": {
+      "p50": 8,
+      "p95": 297,
+      "p99": 732,
+      "max": 917
+    },
+    "category": {
+      "p50": 16,
+      "p95": 976,
+      "p99": 2236,
+      "max": 2420
+    },
+    "home": {
+      "p50": 19,
+      "p95": 720,
+      "p99": 1688,
+      "max": 1847
+    },
+    "search": {
+      "p50": 10,
+      "p95": 537,
+      "p99": 1377,
+      "max": 1548
+    }
+  },
+  "thresholdsPassed": false
+}

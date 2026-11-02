@@ -1,0 +1,46 @@
+{
+  "testid": "strapi-smoke-20261102-154140",
+  "cms": "strapi",
+  "profile": "smoke",
+  "target": "http://strapi:3000",
+  "finishedAt": "2026-11-02T13:42:11.453Z",
+  "durationS": 30,
+  "requests": 1106,
+  "rps": 36.8,
+  "errorRate": 0,
+  "droppedIterations": 0,
+  "maxVUs": 1,
+  "latencyMs": {
+    "all": {
+      "p50": 24,
+      "p95": 50,
+      "p99": 85,
+      "max": 250
+    },
+    "article": {
+      "p50": 17,
+      "p95": 31,
+      "p99": 76,
+      "max": 106
+    },
+    "category": {
+      "p50": 28,
+      "p95": 49,
+      "p99": 65,
+      "max": 98
+    },
+    "home": {
+      "p50": 35,
+      "p95": 61,
+      "p99": 111,
+      "max": 250
+    },
+    "search": {
+      "p50": 19,
+      "p95": 33,
+      "p99": 46,
+      "max": 85
+    }
+  },
+  "thresholdsPassed": true
+}

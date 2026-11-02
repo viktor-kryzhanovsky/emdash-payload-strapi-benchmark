@@ -1,0 +1,19 @@
+ calls | total_ms | mean_ms | rows_per_call |                                                                              query                                                                               
+-------+----------+---------+---------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ 14480 |     1096 |    0.08 |            13 | select distinct "t0".* from "public"."up_permissions" as "t0" left join "public"."up_permissions_role_lnk" as "t1" on "t0"."id" = "t1"."permission_id" left join
+  2898 |      293 |    0.10 |             3 | select distinct "t0"."date", "t0"."id", "t0"."id", "t0"."document_id", "t0"."title", "t0"."slug", "t0"."excerpt", "t0"."date", "t0"."reading_time" from "public"
+  3614 |      281 |    0.08 |             1 | select count(distinct "t0"."id") as "count" from "public"."articles" as "t0" left join "public"."articles_category_lnk" as "t1" on "t0"."id" = "t1"."article_id"
+  2382 |      277 |    0.12 |             1 | select "t0"."id", "t0"."document_id", "t0"."title", "t0"."slug", "t0"."excerpt", "t0"."date", "t0"."reading_time", "t0"."author", "t0"."body" from "public"."art
+  5433 |      248 |    0.05 |             2 | select distinct "t1"."order", "t0"."id", "t0"."label", "t0"."url", "t1"."entity_id" as "__strapientity_id" from "public"."components_navigation_menu_items" as "
+  2204 |      151 |    0.07 |             3 | select distinct "t0"."id", "t0"."document_id", "t0"."title", "t0"."slug", "t1"."article_id" as "__strapiarticle_id" from "public"."categories" as "t0" left join
+  2204 |      141 |    0.06 |             3 | select distinct "t1"."order", "t0"."id", "t0"."document_id", "t0"."url", "t0"."alternative_text", "t0"."width", "t0"."height", "t1"."related_id", "t1"."related_
+  2468 |      125 |    0.05 |             1 | select distinct "t1"."order", "t0"."id", "t0"."document_id", "t0"."url", "t0"."alternative_text", "t0"."width", "t0"."height", "t1"."related_id", "t1"."related_
+  2468 |       79 |    0.03 |             1 | select distinct "t0"."id", "t0"."document_id", "t0"."title", "t0"."slug", "t1"."article_id" as "__strapiarticle_id" from "public"."categories" as "t0" left join
+  5433 |       77 |    0.01 |             1 | select "t0".*, "t0"."id" from "public"."menus" as "t0" where ("t0"."locale" = $1) limit $2
+   716 |       68 |    0.10 |             4 | select distinct "t0"."date", "t0"."id", "t0"."id", "t0"."document_id", "t0"."title", "t0"."slug", "t0"."excerpt", "t0"."date", "t0"."reading_time" from "public"
+   878 |       50 |    0.06 |             4 | select distinct "t1"."order", "t0"."id", "t0"."document_id", "t0"."url", "t0"."alternative_text", "t0"."width", "t0"."height", "t1"."related_id", "t1"."related_
+   759 |       47 |    0.06 |             6 | select distinct "t1"."order", "t0"."id", "t0"."document_id", "t0"."url", "t0"."alternative_text", "t0"."width", "t0"."height", "t1"."related_id", "t1"."related_
+   878 |       43 |    0.05 |             4 | select distinct "t0"."id", "t0"."document_id", "t0"."title", "t0"."slug", "t1"."article_id" as "__strapiarticle_id" from "public"."categories" as "t0" left join
+  1102 |       37 |    0.03 |             2 | select "t0"."id", "t0"."document_id", "t0"."title", "t0"."slug" from "public"."categories" as "t0" where ("t0"."locale" = $1) order by "t0"."id" asc limit $2
+(15 rows)
+

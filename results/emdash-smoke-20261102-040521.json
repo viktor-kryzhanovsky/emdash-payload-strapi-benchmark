@@ -1,0 +1,46 @@
+{
+  "testid": "emdash-smoke-20261102-040521",
+  "cms": "emdash",
+  "profile": "smoke",
+  "target": "http://emdash:3000",
+  "finishedAt": "2026-11-02T02:05:52.965Z",
+  "durationS": 30,
+  "requests": 2696,
+  "rps": 89.9,
+  "errorRate": 0,
+  "droppedIterations": 0,
+  "maxVUs": 1,
+  "latencyMs": {
+    "all": {
+      "p50": 10,
+      "p95": 19,
+      "p99": 34,
+      "max": 92
+    },
+    "article": {
+      "p50": 6,
+      "p95": 11,
+      "p99": 18,
+      "max": 77
+    },
+    "category": {
+      "p50": 12,
+      "p95": 19,
+      "p99": 34,
+      "max": 88
+    },
+    "home": {
+      "p50": 14,
+      "p95": 24,
+      "p99": 52,
+      "max": 92
+    },
+    "search": {
+      "p50": 9,
+      "p95": 15,
+      "p99": 19,
+      "max": 39
+    }
+  },
+  "thresholdsPassed": true
+}

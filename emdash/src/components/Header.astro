@@ -1,0 +1,26 @@
+---
+import type { Menu } from "emdash";
+
+import { t, type Locale } from "../lib/i18n";
+import LangSwitcher from "./LangSwitcher.astro";
+import MenuLinks from "./MenuLinks.astro";
+
+interface Props {
+	locale: Locale;
+	menu: Menu | null;
+}
+
+const { locale, menu } = Astro.props;
+const dict = t(locale);
+---
+
+<header class="header">
+	<a href={`/${locale}`} class="brand">Blog</a>
+	<nav class="main-nav">
+		<MenuLinks menu={menu} />
+	</nav>
+	<form class="header-search" action={`/${locale}/search`}>
+		<input type="search" name="q" placeholder={dict.searchPlaceholder} aria-label={dict.search} />
+	</form>
+	<LangSwitcher locale={locale} />
+</header>

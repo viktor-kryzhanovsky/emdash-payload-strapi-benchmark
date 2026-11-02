@@ -1,0 +1,46 @@
+{
+  "testid": "strapi-breakpoint-20261102-154310",
+  "cms": "strapi",
+  "profile": "breakpoint",
+  "target": "http://strapi:3000",
+  "finishedAt": "2026-11-02T13:46:33.283Z",
+  "durationS": 202,
+  "requests": 7538,
+  "rps": 37.3,
+  "errorRate": 0,
+  "droppedIterations": 24,
+  "maxVUs": 74,
+  "latencyMs": {
+    "all": {
+      "p50": 32,
+      "p95": 576,
+      "p99": 1097,
+      "max": 1479
+    },
+    "article": {
+      "p50": 23,
+      "p95": 409,
+      "p99": 771,
+      "max": 912
+    },
+    "category": {
+      "p50": 34,
+      "p95": 692,
+      "p99": 1250,
+      "max": 1374
+    },
+    "home": {
+      "p50": 43,
+      "p95": 692,
+      "p99": 1395,
+      "max": 1479
+    },
+    "search": {
+      "p50": 25,
+      "p95": 450,
+      "p99": 834,
+      "max": 1122
+    }
+  },
+  "thresholdsPassed": false
+}

@@ -1,0 +1,29 @@
+# dependencies
+node_modules/
+
+# local environment (each project has .env.example)
+.env
+.env.*
+!.env.example
+
+# build output
+.next/
+dist/
+.astro/
+.emdash/
+.strapi/
+.tmp/
+.cache/
+build/
+*.tsbuildinfo
+
+# uploaded media: recreated by the seed scripts from data/covers
+payload/media/
+emdash/uploads/
+strapi/public/uploads/*
+!strapi/public/uploads/.gitkeep
+emdash/data.db*
+
+# personal tool settings
+.claude/settings.local.json
+.DS_Store

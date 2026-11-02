@@ -1,0 +1,8 @@
+# Context is the repository root; only payload/src and payload-web are needed.
+*
+!payload/src
+!payload-web
+payload-web/node_modules
+payload-web/dist
+payload-web/.astro
+payload-web/.env

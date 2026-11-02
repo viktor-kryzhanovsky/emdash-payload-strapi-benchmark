@@ -1,0 +1,46 @@
+{
+  "testid": "strapi-pages-soak-20261102-154704",
+  "cms": "strapi",
+  "profile": "soak",
+  "target": "http://strapi:3000",
+  "finishedAt": "2026-11-02T13:50:05.535Z",
+  "durationS": 180,
+  "requests": 5399,
+  "rps": 30,
+  "errorRate": 0,
+  "droppedIterations": 0,
+  "maxVUs": 50,
+  "latencyMs": {
+    "all": {
+      "p50": 23,
+      "p95": 60,
+      "p99": 147,
+      "max": 495
+    },
+    "article": {
+      "p50": 16,
+      "p95": 45,
+      "p99": 130,
+      "max": 333
+    },
+    "category": {
+      "p50": 24,
+      "p95": 60,
+      "p99": 147,
+      "max": 446
+    },
+    "home": {
+      "p50": 29,
+      "p95": 76,
+      "p99": 215,
+      "max": 495
+    },
+    "search": {
+      "p50": 18,
+      "p95": 50,
+      "p99": 111,
+      "max": 232
+    }
+  },
+  "thresholdsPassed": true
+}

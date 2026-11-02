@@ -1,0 +1,19 @@
+ calls | total_ms | mean_ms | rows_per_call |                                                                              query                                                                               
+-------+----------+---------+---------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+   214 |     1389 |    6.49 |             6 | WITH picked AS ( SELECT DISTINCT r.id AS entry_id FROM content_taxonomies ct JOIN "ec_articles" AS r ON r.translation_group = ct.entry_id WHERE ct.collection = 
+   639 |      542 |    0.85 |             1 | SELECT c.*, (SELECT json_build_object($12, s.seo_title, $13, s.seo_description, $14, s.seo_image, $15, s.seo_canonical, $16, s.seo_no_index) FROM "_emdash_seo" 
+  6221 |      467 |    0.07 |             1 | select count(*) as "count" from "ec_articles" where "locale" = $1 and "status" = $2 and "deleted_at" is null and "title" ilike $3
+    89 |      464 |    5.21 |             4 | WITH picked AS ( SELECT DISTINCT r.id AS entry_id FROM content_taxonomies ct JOIN "ec_articles" AS r ON r.translation_group = ct.entry_id WHERE ct.collection = 
+  6221 |      431 |    0.07 |             2 | select "slug" from "ec_articles" where "locale" = $1 and "status" = $2 and "deleted_at" is null and "title" ilike $3 order by "date" desc limit $4 offset $5
+    55 |       78 |    1.43 |             4 | SELECT *, (SELECT coalesce(json_agg(json_build_object($13, coalesce(exact_term.id, default_term.id), $14, coalesce(exact_term.name, default_term.name), $15, coa
+    16 |       45 |    2.82 |             1 | WITH input AS ( SELECT entry.value ->> $2 AS source_key, entry.value ->> $3 AS source_type, entry.value ->> $4 AS collection_id, entry.value ->> $5 AS collectio
+    16 |       36 |    2.25 |             1 | update "ec_articles" set "title" = $1, "updated_at" = $2, "draft_revision_id" = $3, "version" = version + $5 where "id" = $4 and "deleted_at" is null
+    57 |       30 |    0.52 |             2 | SELECT *, (SELECT coalesce(json_agg(json_build_object($11, coalesce(exact_term.id, default_term.id), $12, coalesce(exact_term.name, default_term.name), $13, coa
+    16 |       29 |    1.84 |             1 | WITH input AS ( SELECT entry.value ->> $2 AS id, entry.value ->> $3 AS source_key, entry.value ->> $4 AS generation, entry.value ->> $5 AS field_slug, entry.val
+    28 |       29 |    1.05 |             6 | SELECT *, (SELECT coalesce(json_agg(json_build_object($15, coalesce(exact_term.id, default_term.id), $16, coalesce(exact_term.name, default_term.name), $17, coa
+    47 |       20 |    0.42 |             2 | SELECT taxonomy_id, SUM(count) AS count FROM ( SELECT ct.taxonomy_id AS taxonomy_id, COUNT(DISTINCT e.translation_group) AS count FROM content_taxonomies AS ct 
+   303 |        8 |    0.03 |             1 | select distinct "translation_group" from "taxonomies" where "name" = $1 and "slug" in ($2) and "locale" = $3
+    27 |        5 |    0.20 |             1 | SELECT *, (SELECT coalesce(json_agg(json_build_object($10, coalesce(exact_term.id, default_term.id), $11, coalesce(exact_term.name, default_term.name), $12, coa
+     5 |        4 |    0.78 |             1 | insert into "options" ("name", "value", "revision") values ($1, $2, $3) on conflict ("name") do update set "value" = $4, "revision" = $5
+(15 rows)
+

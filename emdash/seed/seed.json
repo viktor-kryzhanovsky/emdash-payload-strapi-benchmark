@@ -1,0 +1,98 @@
+{
+	"$schema": "https://emdashcms.com/seed.schema.json",
+	"version": "1",
+	"meta": {
+		"name": "CMS bench blog",
+		"description": "Same content model as the Payload site: articles, categories, menu; en/uk"
+	},
+	"settings": {
+		"title": "Blog",
+		"tagline": ""
+	},
+	"collections": [
+		{
+			"slug": "articles",
+			"label": "Articles",
+			"labelSingular": "Article",
+			"supports": [],
+			"fields": [
+				{ "slug": "title", "label": "Title", "type": "string", "required": true },
+				{ "slug": "excerpt", "label": "Excerpt", "type": "text" },
+				{ "slug": "cover", "label": "Cover", "type": "image", "translatable": false },
+				{ "slug": "body", "label": "Body", "type": "portableText" },
+				{ "slug": "reading_time", "label": "Reading time (min)", "type": "integer" },
+				{ "slug": "author", "label": "Author", "type": "string", "translatable": false },
+				{
+					"slug": "date",
+					"label": "Date",
+					"type": "datetime",
+					"required": true,
+					"indexed": true,
+					"translatable": false
+				}
+			]
+		}
+	],
+	"taxonomies": [
+		{
+			"id": "tax:category:en",
+			"name": "category",
+			"label": "Categories",
+			"labelSingular": "Category",
+			"hierarchical": false,
+			"collections": ["articles"],
+			"locale": "en",
+			"terms": [
+				{ "id": "term:activities:en", "slug": "activities", "label": "Activities", "locale": "en" },
+				{ "id": "term:education:en", "slug": "education", "label": "Education", "locale": "en" }
+			]
+		},
+		{
+			"id": "tax:category:uk",
+			"name": "category",
+			"label": "Категорії",
+			"labelSingular": "Категорія",
+			"locale": "uk",
+			"translationOf": "tax:category:en",
+			"terms": [
+				{
+					"id": "term:activities:uk",
+					"slug": "activities",
+					"label": "Активності",
+					"locale": "uk",
+					"translationOf": "term:activities:en"
+				},
+				{
+					"id": "term:education:uk",
+					"slug": "education",
+					"label": "Навчання",
+					"locale": "uk",
+					"translationOf": "term:education:en"
+				}
+			]
+		}
+	],
+	"menus": [
+		{
+			"id": "menu:primary:en",
+			"name": "primary",
+			"label": "Menu",
+			"locale": "en",
+			"items": [
+				{ "type": "custom", "label": "Activities", "url": "/en/category/activities" },
+				{ "type": "custom", "label": "Education", "url": "/en/category/education" }
+			]
+		},
+		{
+			"id": "menu:primary:uk",
+			"name": "primary",
+			"label": "Меню",
+			"locale": "uk",
+			"translationOf": "menu:primary:en",
+			"items": [
+				{ "type": "custom", "label": "Активності", "url": "/uk/category/activities" },
+				{ "type": "custom", "label": "Навчання", "url": "/uk/category/education" }
+			]
+		}
+	]
+}

@@ -1,0 +1,25 @@
+---
+import { LOCALES, type Locale } from "../lib/i18n";
+
+interface Props {
+	locale: Locale;
+}
+
+// Keeps the current page and swaps the locale segment: /en/articles/x -> /uk/articles/x
+const { locale } = Astro.props;
+const rest = Astro.url.pathname.split("/").slice(2).join("/");
+---
+
+<div class="lang-switcher">
+	{
+		LOCALES.map((code) =>
+			code === locale ? (
+				<span class="active">{code}</span>
+			) : (
+				<a href={`/${code}${rest ? `/${rest}` : ""}`} hreflang={code}>
+					{code}
+				</a>
+			),
+		)
+	}
+</div>

@@ -1,0 +1,18 @@
+# Experiment "where does the database break": Payload gets 4 workers on 4 cores so that
+# Postgres (still 1 vCPU) becomes the bottleneck. Not the benchmark budget.
+#   docker compose -f compose.yml -f compose.dbmax.yml up -d payload
+#   VARIANT=4w ./load/run.sh breakpoint payload -e MAX_RATE=600
+# Back to the normal setup: docker compose up -d payload
+services:
+  payload:
+    command: ["node", "cluster.mjs"]
+    environment:
+      WORKERS: 4
+      # 4 x 5 = 20 connections to Postgres
+      DATABASE_POOL_MAX: 5
+    cpuset: "0,1,3,4"
+    cpus: 4
+
+  k6:
+    # cores 3-4 are taken by Payload here; k6 shares core 5 with monitoring
+    cpuset: "5"

@@ -1,0 +1,12 @@
+{
+	"extends": "astro/tsconfigs/base",
+	"compilerOptions": {
+		"types": ["node"],
+		"paths": {
+			"@/*": ["../payload/src/*"],
+			"@payload-config": ["../payload/src/payload.config.ts"],
+			"next/cache": ["./src/stubs/next-cache.ts"]
+		}
+	},
+	"include": ["src", ".astro/types.d.ts"]
+}

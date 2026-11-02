@@ -1,0 +1,46 @@
+{
+  "testid": "payload-smoke-20261101-213657",
+  "cms": "payload",
+  "profile": "smoke",
+  "target": "http://payload:3000",
+  "finishedAt": "2026-11-01T19:37:28.336Z",
+  "durationS": 30,
+  "requests": 1341,
+  "rps": 44.6,
+  "errorRate": 0,
+  "droppedIterations": 0,
+  "maxVUs": 1,
+  "latencyMs": {
+    "all": {
+      "p50": 20,
+      "p95": 30,
+      "p99": 56,
+      "max": 117
+    },
+    "article": {
+      "p50": 20,
+      "p95": 27,
+      "p99": 47,
+      "max": 98
+    },
+    "category": {
+      "p50": 20,
+      "p95": 28,
+      "p99": 57,
+      "max": 108
+    },
+    "home": {
+      "p50": 22,
+      "p95": 39,
+      "p99": 68,
+      "max": 117
+    },
+    "search": {
+      "p50": 20,
+      "p95": 33,
+      "p99": 41,
+      "max": 42
+    }
+  },
+  "thresholdsPassed": true
+}

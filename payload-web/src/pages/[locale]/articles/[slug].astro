@@ -1,0 +1,44 @@
+---
+import { getArticle, getMenu } from "@/lib/data";
+import { convertLexicalToHTML } from "@payloadcms/richtext-lexical/html";
+
+import ArticleMeta from "../../../components/ArticleMeta.astro";
+import Base from "../../../layouts/Base.astro";
+import { isLocale, t } from "../../../lib/i18n";
+
+const { locale, slug } = Astro.params;
+if (!isLocale(locale) || !slug) return Astro.rewrite("/404");
+
+const menu = await getMenu(locale);
+const article = await getArticle(locale, slug);
+if (!article) return Astro.rewrite("/404");
+
+const category = typeof article.category === "object" ? article.category : null;
+const cover = typeof article.cover === "object" ? article.cover : null;
+// Lexical JSON -> HTML on the server (the Next site renders it with the RichText React component).
+const body = article.body ? convertLexicalToHTML({ data: article.body }) : null;
+---
+
+<Base locale={locale} menu={menu}>
+	<article class="single-article">
+		{
+			category && (
+				<a href={`/${locale}/category/${category.slug}`} class="tag">
+					{category.title}
+				</a>
+			)
+		}
+		<h1>{article.title}</h1>
+		<ArticleMeta locale={locale} date={article.date} readingTime={article.readingTime} />
+		{cover?.url && <img class="cover" src={cover.url} alt={cover.alt} width={cover.width} height={cover.height} />}
+		{article.excerpt && <p class="lead">{article.excerpt}</p>}
+		{body && <div class="content" set:html={body} />}
+		{
+			article.author && (
+				<p class="author">
+					{t(locale).by} {article.author}
+				</p>
+			)
+		}
+	</article>
+</Base>

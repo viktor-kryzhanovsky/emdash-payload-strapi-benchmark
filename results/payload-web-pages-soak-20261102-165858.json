@@ -1,0 +1,46 @@
+{
+  "testid": "payload-web-pages-soak-20261102-165858",
+  "cms": "payload-web",
+  "profile": "soak",
+  "target": "http://payload-web:3000",
+  "finishedAt": "2026-11-02T15:01:59.675Z",
+  "durationS": 180,
+  "requests": 8999,
+  "rps": 50,
+  "errorRate": 0,
+  "droppedIterations": 0,
+  "maxVUs": 50,
+  "latencyMs": {
+    "all": {
+      "p50": 10,
+      "p95": 20,
+      "p99": 83,
+      "max": 546
+    },
+    "article": {
+      "p50": 8,
+      "p95": 18,
+      "p99": 76,
+      "max": 542
+    },
+    "category": {
+      "p50": 10,
+      "p95": 20,
+      "p99": 65,
+      "max": 546
+    },
+    "home": {
+      "p50": 11,
+      "p95": 27,
+      "p99": 138,
+      "max": 514
+    },
+    "search": {
+      "p50": 10,
+      "p95": 18,
+      "p99": 86,
+      "max": 347
+    }
+  },
+  "thresholdsPassed": true
+}

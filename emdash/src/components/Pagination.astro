@@ -1,0 +1,41 @@
+---
+import { t, type Locale } from "../lib/i18n";
+
+interface Props {
+	locale: Locale;
+	page: number;
+	totalPages: number;
+	/** May already contain a query string (search page). */
+	baseHref: string;
+}
+
+const { locale, page, totalPages, baseHref } = Astro.props;
+const dict = t(locale);
+const href = (n: number) => `${baseHref}${baseHref.includes("?") ? "&" : "?"}page=${n}`;
+---
+
+{
+	totalPages > 1 && (
+		<nav class="pagination">
+			{page > 1 && (
+				<a href={href(page - 1)} aria-label={dict.previous}>
+					←
+				</a>
+			)}
+			{Array.from({ length: totalPages }, (_, i) => i + 1).map((n) =>
+				n === page ? (
+					<span class="current" aria-current="page">
+						{n}
+					</span>
+				) : (
+					<a href={href(n)}>{n}</a>
+				),
+			)}
+			{page < totalPages && (
+				<a href={href(page + 1)} aria-label={dict.next}>
+					→
+				</a>
+			)}
+		</nav>
+	)
+}

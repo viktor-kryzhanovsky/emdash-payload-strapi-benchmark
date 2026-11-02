@@ -1,0 +1,32 @@
+---
+import { isExternal, menuHref } from "@/components/menu";
+import type { Menu } from "@/payload-types";
+
+import type { Locale } from "../lib/i18n";
+
+interface Props {
+	locale: Locale;
+	menu: Menu | null;
+}
+
+const { locale, menu } = Astro.props;
+---
+
+<ul>
+	{
+		menu?.items?.map((item) => {
+			const href = menuHref(locale, item);
+			return (
+				<li>
+					{isExternal(href) ? (
+						<a href={href} target="_blank" rel="noopener noreferrer">
+							{item.label}
+						</a>
+					) : (
+						<a href={href}>{item.label}</a>
+					)}
+				</li>
+			);
+		})
+	}
+</ul>

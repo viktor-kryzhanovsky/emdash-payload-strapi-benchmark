@@ -1,0 +1,41 @@
+---
+// Self-hosted fonts (no Google requests at runtime), same as next/font on the Payload site.
+import "@fontsource-variable/inter";
+import "@fontsource/montserrat/800.css";
+import "../styles/styles.css";
+
+import Footer from "../components/Footer.astro";
+import Header from "../components/Header.astro";
+import { getMenu } from "@/lib/data";
+import type { Menu } from "@/payload-types";
+import type { Locale } from "../lib/i18n";
+
+interface Props {
+	locale: Locale;
+	/** Loaded by the page; 404 leaves it out. */
+	menu?: Menu | null;
+}
+
+const { locale } = Astro.props;
+const menu = Astro.props.menu !== undefined ? Astro.props.menu : await getMenu(locale);
+---
+
+<!doctype html>
+<html lang={locale}>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Blog</title>
+		<style is:global>
+			:root {
+				--font-inter: "Inter Variable";
+				--font-montserrat: "Montserrat";
+			}
+		</style>
+	</head>
+	<body>
+		<Header locale={locale} menu={menu} />
+		<main class="container"><slot /></main>
+		<Footer locale={locale} menu={menu} />
+	</body>
+</html>

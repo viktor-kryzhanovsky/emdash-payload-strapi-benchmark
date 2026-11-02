@@ -1,0 +1,46 @@
+{
+  "testid": "strapi-steps-20261102-160524",
+  "cms": "strapi",
+  "profile": "steps",
+  "target": "http://strapi:3000",
+  "finishedAt": "2026-11-02T14:17:56.351Z",
+  "durationS": 750,
+  "requests": 21787,
+  "rps": 29,
+  "errorRate": 0,
+  "droppedIterations": 112,
+  "maxVUs": 148,
+  "latencyMs": {
+    "all": {
+      "p50": 25,
+      "p95": 296,
+      "p99": 3018,
+      "max": 11157
+    },
+    "article": {
+      "p50": 16,
+      "p95": 228,
+      "p99": 2506,
+      "max": 8758
+    },
+    "category": {
+      "p50": 26,
+      "p95": 349,
+      "p99": 3515,
+      "max": 10791
+    },
+    "home": {
+      "p50": 32,
+      "p95": 410,
+      "p99": 4228,
+      "max": 11157
+    },
+    "search": {
+      "p50": 19,
+      "p95": 280,
+      "p99": 3069,
+      "max": 9305
+    }
+  },
+  "thresholdsPassed": false
+}

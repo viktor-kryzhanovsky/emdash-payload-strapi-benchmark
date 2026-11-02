@@ -1,0 +1,11 @@
+# Bottleneck experiments (not the benchmark budget).
+# Postgres on two cores (core 1 is spare in the normal setup):
+#   PG_CPUSET=1,2 PG_CPUS=2 docker compose -f compose.yml -f compose.experiments.yml up -d postgres
+# EmDash with a pool of 20 (the pool size is baked into the build):
+#   docker compose build --build-arg DATABASE_POOL_MAX=20 emdash && docker compose up -d emdash
+# Back to normal:
+#   docker compose up -d postgres && docker compose build emdash && docker compose up -d emdash
+services:
+  postgres:
+    cpuset: ${PG_CPUSET:-2}
+    cpus: ${PG_CPUS:-1}

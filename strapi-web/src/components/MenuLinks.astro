@@ -1,0 +1,26 @@
+---
+import type { Menu } from "../lib/data";
+
+interface Props {
+	menu: Menu | null;
+}
+
+const { menu } = Astro.props;
+const isExternal = (href: string) => /^https?:\/\//.test(href);
+---
+
+<ul>
+	{
+		menu?.items.map((item) => (
+			<li>
+				{isExternal(item.url) ? (
+					<a href={item.url} target="_blank" rel="noopener noreferrer">
+						{item.label}
+					</a>
+				) : (
+					<a href={item.url}>{item.label}</a>
+				)}
+			</li>
+		))
+	}
+</ul>

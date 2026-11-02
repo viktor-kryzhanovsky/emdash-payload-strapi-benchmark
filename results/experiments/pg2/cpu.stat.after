@@ -1,0 +1,2 @@
+emdash usage_usec 300755186 user_usec 270815984 system_usec 29939202 nice_usec 0 nr_periods 5238 nr_throttled 17 throttled_usec 134054 nr_bursts 0 burst_usec 0 
+postgres usage_usec 367462175 user_usec 256198801 system_usec 111263373 nice_usec 0 nr_periods 5324 nr_throttled 4 throttled_usec 10749 nr_bursts 0 burst_usec 0 

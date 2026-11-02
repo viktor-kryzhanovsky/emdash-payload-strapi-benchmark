@@ -1,0 +1,19 @@
+ calls | total_ms | mean_ms | rows_per_call |                                                                              query                                                                               
+-------+----------+---------+---------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  5866 |      598 |    0.10 |             2 | select distinct "articles"."id", "articles"."date", "articles"."date", "articles"."created_at", "articles"."created_at" from "articles" left join "articles_loca
+  5038 |      527 |    0.10 |             1 | select COUNT($4) OVER() from "articles" left join "articles_locales" on ("articles"."id" = "articles_locales"."_parent_id" and "articles_locales"."_locale" = $1
+ 10012 |      470 |    0.05 |             2 | select "categories"."id", "categories"."slug", "categories__locales"."data" as "_locales" from "categories" "categories" left join lateral (select coalesce(json
+  6647 |      454 |    0.07 |             1 | select "menu"."id", "menu"."updated_at", "menu"."created_at", "menu_items"."data" as "items" from "menu" "menu" left join lateral (select coalesce(json_agg(json
+  1714 |      225 |    0.13 |             4 | select "articles"."id", "articles"."slug", "articles"."cover_id", "articles"."date", "articles"."category_id", "articles__locales"."data" as "_locales" from "ar
+   622 |      217 |    0.35 |             1 | select "articles"."id", "articles"."slug", "articles"."cover_id", "articles"."author", "articles"."date", "articles"."category_id", "articles"."updated_at", "ar
+  1657 |      102 |    0.06 |             2 | select "articles"."id", "articles"."slug", "articles"."cover_id", "articles"."date", "articles"."category_id", "articles__locales"."data" as "_locales" from "ar
+  2486 |       84 |    0.03 |             1 | select "categories"."id", "categories"."slug", "categories__locales"."data" as "_locales" from "categories" "categories" left join lateral (select coalesce(json
+   856 |       76 |    0.09 |             6 | select "articles"."id", "articles"."slug", "articles"."cover_id", "articles"."date", "articles"."category_id", "articles__locales"."data" as "_locales" from "ar
+  2249 |       53 |    0.02 |             1 | select "id", "alt", "url", "filename", "width", "height" from "media" "media" where "media"."id" in ($1) order by "media"."created_at" desc
+  1782 |       44 |    0.02 |             4 | select "id", "alt", "url", "filename", "width", "height" from "media" "media" where "media"."id" in ($1, $2, $3, $4) order by "media"."created_at" desc
+   811 |       42 |    0.05 |             1 | select "articles"."id", "articles"."slug", "articles"."cover_id", "articles"."date", "articles"."category_id", "articles__locales"."data" as "_locales" from "ar
+   916 |       21 |    0.02 |             3 | select "id", "alt", "url", "filename", "width", "height" from "media" "media" where "media"."id" in ($1, $2, $3) order by "media"."created_at" desc
+   840 |       18 |    0.02 |             2 | select "id", "alt", "url", "filename", "width", "height" from "media" "media" where "media"."id" in ($1, $2) order by "media"."created_at" desc
+    16 |       15 |    0.95 |             2 | insert into "articles_locales" ("title", "excerpt", "body", "reading_time", "id", "_locale", "_parent_id") values ($1, $2, $3, $4, default, $5, $6), ($7, $8, $9
+(15 rows)
+

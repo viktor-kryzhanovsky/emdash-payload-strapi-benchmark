@@ -1,0 +1,15 @@
+---
+import Base from "../layouts/Base.astro";
+import { isLocale } from "../lib/i18n";
+
+// Pages rewrite here with Astro.rewrite("/404"); originPathname is the URL that was requested.
+const segment = (Astro.originPathname ?? Astro.url.pathname).split("/")[1];
+const locale = isLocale(segment) ? segment : "en";
+Astro.response.status = 404;
+---
+
+<Base locale={locale}>
+	<section class="section not-found">
+		<h1>404</h1>
+	</section>
+</Base>

@@ -1,0 +1,270 @@
+# CPU pinning (Docker VM has 6 CPUs) so components don't steal CPU from each other:
+#   0 CMS under test | 1 spare | 2 postgres | 3-4 k6 | 5 monitoring
+# CMS budget is 1 vCPU / 2 GB: each CMS runs as a single Node process out of the box,
+# so a second core would mostly stay idle.
+services:
+  postgres:
+    image: postgres:17.6-alpine
+    environment:
+      POSTGRES_USER: payload
+      POSTGRES_PASSWORD: payload
+      POSTGRES_DB: payload
+    command:
+      - postgres
+      - -c
+      - shared_buffers=256MB
+      - -c
+      - effective_cache_size=768MB
+      - -c
+      - work_mem=8MB
+      - -c
+      - shared_preload_libraries=pg_stat_statements
+      # JIT costs ~12 ms of compilation on short CMS queries with a bad row estimate
+      - -c
+      - jit=off
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      # runs only when the volume is created for the first time
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    cpuset: "2"
+    cpus: 1
+    mem_limit: 1g
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "payload"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  # Production build for the benchmark: http://localhost:8080
+  # Dev server (pnpm dev) keeps using the `payload` database on :3000.
+  payload:
+    build:
+      context: ./payload
+      args:
+        # page mode needs a rebuild (next.config rewrites); data mode is runtime only
+        CMS_CACHE: ${PAYLOAD_CACHE:-off}
+    environment:
+      DATABASE_URL: postgres://payload:payload@postgres:5432/payload_bench
+      DATABASE_POOL_MAX: 10
+      PAYLOAD_SECRET: bench-only-secret
+      # off | data (Local API results in Next's data cache, see payload/src/lib/data.ts)
+      # | page (whole pages in the full route cache, see payload/src/app/(cached))
+      CMS_CACHE: ${PAYLOAD_CACHE:-off}
+      # webhook to a headless frontend's cache (payload-web), see payload/src/lib/revalidate.ts
+      REVALIDATE_URL: ${PAYLOAD_REVALIDATE_URL:-}
+      REVALIDATE_REPEAT_MS: ${PAYLOAD_REVALIDATE_REPEAT_MS:-}
+      REVALIDATE_SECRET: bench-only-revalidate
+    ports:
+      - "8080:3000"
+    volumes:
+      - ./payload/media:/app/media:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+    # benchmark budget: 1 vCPU / 2 GB
+    cpuset: "0"
+    cpus: 1
+    mem_limit: 2g
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/en').then(r=>process.exit(r.ok?0:1),()=>process.exit(1))"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 10s
+
+  # Production build for the benchmark: http://localhost:8081
+  # Same core and budget as payload: the CMSs are benchmarked one at a time.
+  emdash:
+    build:
+      context: ./emdash
+      args:
+        # off | data (EmDash object cache); baked into the build, so rebuild to switch
+        CMS_CACHE: ${EMDASH_CACHE:-off}
+    image: whitebit-emdash
+    environment:
+      # node-postgres reads PG* at runtime (emdash bakes astro.config into the build)
+      PGHOST: postgres
+      PGPORT: 5432
+      PGUSER: emdash
+      PGPASSWORD: emdash
+      PGDATABASE: emdash_bench
+      # bench-only key (`npx emdash secrets generate`)
+      EMDASH_ENCRYPTION_KEY: emdash_enc_v1_MTGgmpSZjFQCrU2NCIM7qhZ6Ek1_dwg6AM0mSgGbwPs
+    ports:
+      - "8081:3000"
+    volumes:
+      - ./emdash/uploads:/app/uploads:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+    cpuset: "0"
+    cpus: 1
+    mem_limit: 2g
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/en').then(r=>process.exit(r.ok?0:1),()=>process.exit(1))"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 10s
+
+  # Payload without Next: Astro pages call the Payload Local API in-process (payload/src/lib/data.ts),
+  # http://localhost:8083. Same database and budget as payload; the admin stays in the Next app.
+  # Load test: DB=payload_bench ./load/run.sh <profile> payload-web
+  payload-web:
+    build:
+      context: .
+      dockerfile: payload-web/Dockerfile
+    environment:
+      DATABASE_URL: postgres://payload:payload@postgres:5432/payload_bench
+      DATABASE_POOL_MAX: 10
+      PAYLOAD_SECRET: bench-only-secret
+      # off | data (Local API results cached in this process; invalidated by the payload hooks' webhook)
+      CMS_CACHE: ${PAYLOAD_WEB_CACHE:-off}
+      REVALIDATE_SECRET: bench-only-revalidate
+    ports:
+      - "8083:3000"
+    volumes:
+      - ./payload/media:/app/payload-web/media:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+    cpuset: "0"
+    cpus: 1
+    mem_limit: 2g
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/en').then(r=>process.exit(r.ok?0:1),()=>process.exit(1))"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 10s
+
+  # Strapi is headless: the site (strapi, http://localhost:8082) is an Astro frontend that reads
+  # strapi-cms over REST. Budget 1 vCPU / 2 GB for the pair: both on core 0, 1 GB each.
+  strapi-cms:
+    build: ./strapi
+    environment:
+      DATABASE_CLIENT: postgres
+      DATABASE_HOST: postgres
+      DATABASE_PORT: 5432
+      DATABASE_NAME: strapi_bench
+      DATABASE_USERNAME: strapi
+      DATABASE_PASSWORD: strapi
+      DATABASE_POOL_MAX: 10
+      # bench-only secrets
+      APP_KEYS: benchKey1,benchKey2
+      API_TOKEN_SALT: benchApiTokenSalt
+      ADMIN_JWT_SECRET: benchAdminJwtSecret
+      TRANSFER_TOKEN_SALT: benchTransferSalt
+      JWT_SECRET: benchJwtSecret
+      ENCRYPTION_KEY: benchEncryptionKey
+    ports:
+      - "1338:1337"
+    volumes:
+      - ./strapi/public/uploads:/app/public/uploads
+    depends_on:
+      postgres:
+        condition: service_healthy
+    cpuset: "0"
+    cpus: 1
+    mem_limit: 1g
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:1337/_health').then(r=>process.exit(r.ok?0:1),()=>process.exit(1))"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 20s
+
+  strapi:
+    build: ./strapi-web
+    environment:
+      STRAPI_URL: http://strapi-cms:1337
+    ports:
+      - "8082:3000"
+    depends_on:
+      strapi-cms:
+        condition: service_healthy
+    cpuset: "0"
+    cpus: 1
+    mem_limit: 1g
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/en').then(r=>process.exit(r.ok?0:1),()=>process.exit(1))"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 10s
+
+  # --- monitoring: Grafana http://localhost:3001, Prometheus http://localhost:9090 ---
+
+  prometheus:
+    image: prom/prometheus:v3.1.0
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+      # k6 pushes its metrics here (remote write)
+      - --web.enable-remote-write-receiver
+    volumes:
+      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - promdata:/prometheus
+    ports:
+      - "9090:9090"
+    cpuset: "5"
+
+  grafana:
+    image: grafana/grafana:11.4.0
+    environment:
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_AUTH_ANONYMOUS_ORG_ROLE: Admin
+      GF_AUTH_DISABLE_LOGIN_FORM: "true"
+    volumes:
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards:ro
+      - grafanadata:/var/lib/grafana
+    ports:
+      - "3001:3000"
+    depends_on:
+      - prometheus
+    cpuset: "5"
+
+  postgres-exporter:
+    image: prometheuscommunity/postgres-exporter:v0.16.0
+    environment:
+      DATA_SOURCE_NAME: postgresql://payload:payload@postgres:5432/payload?sslmode=disable
+    depends_on:
+      - postgres
+    cpuset: "5"
+
+  # cAdvisor can't see containers on Docker Desktop (containerd snapshotter),
+  # so a tiny Docker-API exporter provides the same metric names.
+  docker-exporter:
+    image: node:24.22.1-bookworm-slim
+    command: ["node", "/app/exporter.mjs"]
+    environment:
+      COMPOSE_PROJECT: whitebit
+    volumes:
+      - ./monitoring/docker-exporter/exporter.mjs:/app/exporter.mjs:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    cpuset: "5"
+
+  # --- load generator: started only by ./load/run.sh (profile "load") ---
+
+  k6:
+    image: grafana/k6:1.3.0
+    profiles: ["load"]
+    environment:
+      K6_PROMETHEUS_RW_SERVER_URL: http://prometheus:9090/api/v1/write
+      K6_PROMETHEUS_RW_TREND_STATS: p(50),p(95),p(99)
+      K6_PROMETHEUS_RW_PUSH_INTERVAL: 5s
+    volumes:
+      - ./load:/scripts:ro
+      - ./data:/data:ro
+      - ./results:/results
+    depends_on:
+      - prometheus
+    cpuset: "3,4"
+
+volumes:
+  pgdata:
+  promdata:
+  grafanadata:

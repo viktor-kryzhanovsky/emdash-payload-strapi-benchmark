@@ -1,0 +1,46 @@
+{
+  "testid": "emdash-l1-inv-soak-20261102-123344",
+  "cms": "emdash",
+  "profile": "soak",
+  "target": "http://emdash:3000",
+  "finishedAt": "2026-11-02T10:37:45.869Z",
+  "durationS": 240,
+  "requests": 50400,
+  "rps": 209.9,
+  "errorRate": 0,
+  "droppedIterations": 0,
+  "maxVUs": 50,
+  "latencyMs": {
+    "all": {
+      "p50": 3,
+      "p95": 34,
+      "p99": 85,
+      "max": 543
+    },
+    "article": {
+      "p50": 2,
+      "p95": 32,
+      "p99": 78,
+      "max": 439
+    },
+    "category": {
+      "p50": 3,
+      "p95": 35,
+      "p99": 83,
+      "max": 430
+    },
+    "home": {
+      "p50": 3,
+      "p95": 34,
+      "p99": 81,
+      "max": 415
+    },
+    "search": {
+      "p50": 4,
+      "p95": 49,
+      "p99": 129,
+      "max": 543
+    }
+  },
+  "thresholdsPassed": true
+}

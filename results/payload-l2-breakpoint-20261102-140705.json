@@ -1,0 +1,46 @@
+{
+  "testid": "payload-l2-breakpoint-20261102-140705",
+  "cms": "payload",
+  "profile": "breakpoint",
+  "target": "http://payload:3000",
+  "finishedAt": "2026-11-02T12:11:53.085Z",
+  "durationS": 286,
+  "requests": 87657,
+  "rps": 306.5,
+  "errorRate": 0,
+  "droppedIterations": 15202,
+  "maxVUs": 400,
+  "latencyMs": {
+    "all": {
+      "p50": 20,
+      "p95": 514,
+      "p99": 9977,
+      "max": 11742
+    },
+    "article": {
+      "p50": 19,
+      "p95": 93,
+      "p99": 243,
+      "max": 1651
+    },
+    "category": {
+      "p50": 19,
+      "p95": 96,
+      "p99": 229,
+      "max": 1633
+    },
+    "home": {
+      "p50": 19,
+      "p95": 96,
+      "p99": 248,
+      "max": 1516
+    },
+    "search": {
+      "p50": 421,
+      "p95": 10488,
+      "p99": 11309,
+      "max": 11742
+    }
+  },
+  "thresholdsPassed": false
+}

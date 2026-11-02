@@ -1,0 +1,19 @@
+ calls | total_ms | mean_ms | rows_per_call |                                                                              query                                                                               
+-------+----------+---------+---------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ 43336 |   283990 |    6.55 |             5 | WITH picked AS ( SELECT DISTINCT r.id AS entry_id FROM content_taxonomies ct JOIN "ec_articles" AS r ON r.translation_group = ct.entry_id WHERE ct.collection = 
+ 10253 |    59010 |    5.76 |             4 | WITH picked AS ( SELECT DISTINCT r.id AS entry_id FROM content_taxonomies ct JOIN "ec_articles" AS r ON r.translation_group = ct.entry_id WHERE ct.collection = 
+ 37164 |    44608 |    1.20 |             1 | SELECT c.*, (SELECT json_build_object($12, s.seo_title, $13, s.seo_description, $14, s.seo_image, $15, s.seo_canonical, $16, s.seo_no_index) FROM "_emdash_seo" 
+ 37008 |     5909 |    0.16 |             2 | SELECT taxonomy_id, SUM(count) AS count FROM ( SELECT ct.taxonomy_id AS taxonomy_id, COUNT(DISTINCT e.translation_group) AS count FROM content_taxonomies AS ct 
+  2408 |     5564 |    2.31 |             4 | SELECT *, (SELECT coalesce(json_agg(json_build_object($13, coalesce(exact_term.id, default_term.id), $14, coalesce(exact_term.name, default_term.name), $15, coa
+  1149 |     4210 |    3.66 |             6 | SELECT *, (SELECT coalesce(json_agg(json_build_object($15, coalesce(exact_term.id, default_term.id), $16, coalesce(exact_term.name, default_term.name), $17, coa
+ 41216 |     3103 |    0.08 |             4 | select "i".*, "m"."id" as "m_id", "m"."name" as "m_name", "m"."label" as "m_label", "m"."locale" as "m_locale", "m"."translation_group" as "m_translation_group"
+  2361 |     2595 |    1.10 |             2 | SELECT *, (SELECT coalesce(json_agg(json_build_object($11, coalesce(exact_term.id, default_term.id), $12, coalesce(exact_term.name, default_term.name), $13, coa
+ 41310 |     1598 |    0.04 |             2 | select "i".*, "m"."id" as "m_id", "m"."name" as "m_name", "m"."label" as "m_label", "m"."locale" as "m_locale", "m"."translation_group" as "m_translation_group"
+ 53589 |     1306 |    0.02 |             1 | select distinct "translation_group" from "taxonomies" where "name" = $1 and "slug" in ($2) and "locale" = $3
+  8354 |      848 |    0.10 |             1 | select count(*) as "count" from "ec_articles" where "locale" = $1 and "status" = $2 and "deleted_at" is null and "title" ilike $3
+  8354 |      810 |    0.10 |             2 | select "slug" from "ec_articles" where "locale" = $1 and "status" = $2 and "deleted_at" is null and "title" ilike $3 order by "date" desc limit $4 offset $5
+  1229 |      661 |    0.54 |             1 | SELECT *, (SELECT coalesce(json_agg(json_build_object($10, coalesce(exact_term.id, default_term.id), $11, coalesce(exact_term.name, default_term.name), $12, coa
+ 44155 |      600 |    0.01 |             0 | SELECT f.slug AS slug, f.validation AS validation, r.id AS relation_id FROM "_emdash_fields" AS f INNER JOIN "_emdash_collections" AS c ON c.id = f.collection_i
+ 16581 |      512 |    0.03 |             2 | select * from "taxonomies" where "name" = $1 and "locale" = $2 order by "sort_order" asc, "label" asc, CASE lower("locale") WHEN $3 THEN $4 ELSE $5 END asc
+(15 rows)
+

@@ -1,0 +1,46 @@
+{
+  "testid": "payload-data-soak-20261102-004059",
+  "cms": "payload",
+  "profile": "soak",
+  "target": "http://payload:3000/bench-data",
+  "finishedAt": "2026-11-01T22:44:00.610Z",
+  "durationS": 180,
+  "requests": 9000,
+  "rps": 50,
+  "errorRate": 0,
+  "droppedIterations": 0,
+  "maxVUs": 50,
+  "latencyMs": {
+    "all": {
+      "p50": 9,
+      "p95": 16,
+      "p99": 61,
+      "max": 236
+    },
+    "article": {
+      "p50": 8,
+      "p95": 13,
+      "p99": 56,
+      "max": 208
+    },
+    "category": {
+      "p50": 9,
+      "p95": 16,
+      "p99": 57,
+      "max": 236
+    },
+    "home": {
+      "p50": 10,
+      "p95": 18,
+      "p99": 88,
+      "max": 200
+    },
+    "search": {
+      "p50": 9,
+      "p95": 15,
+      "p99": 72,
+      "max": 176
+    }
+  },
+  "thresholdsPassed": true
+}

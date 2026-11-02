@@ -1,0 +1,19 @@
+ calls | total_ms | mean_ms | rows_per_call |                                                                              query                                                                               
+-------+----------+---------+---------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  4063 |     1444 |    0.36 |             1 | select "articles"."id", "articles"."slug", "articles"."cover_id", "articles"."author", "articles"."date", "articles"."category_id", "articles"."updated_at", "ar
+  4845 |      610 |    0.13 |             3 | select "articles"."id", "articles"."slug", "articles"."cover_id", "articles"."date", "articles"."category_id", "articles__locales"."data" as "_locales" from "ar
+  9035 |      594 |    0.07 |             1 | select "menu"."id", "menu"."updated_at", "menu"."created_at", "menu_items"."data" as "items" from "menu" "menu" left join lateral (select coalesce(json_agg(json
+  9516 |      341 |    0.04 |             2 | select "categories"."id", "categories"."slug", "categories__locales"."data" as "_locales" from "categories" "categories" left join lateral (select coalesce(json
+ 10279 |      284 |    0.03 |             1 | select "categories"."id", "categories"."slug", "categories__locales"."data" as "_locales" from "categories" "categories" left join lateral (select coalesce(json
+  1114 |      125 |    0.11 |             4 | select "articles"."id", "articles"."slug", "articles"."cover_id", "articles"."date", "articles"."category_id", "articles__locales"."data" as "_locales" from "ar
+   865 |       78 |    0.09 |             2 | select distinct "articles"."id", "articles"."date", "articles"."date", "articles"."created_at", "articles"."created_at" from "articles" left join "articles_loca
+  2255 |       70 |    0.03 |             1 | select "categories"."id", "categories"."slug", "categories"."updated_at", "categories"."created_at", "categories__locales"."data" as "_locales" from "categories
+   738 |       66 |    0.09 |             1 | select COUNT($4) OVER() from "articles" left join "articles_locales" on ("articles"."id" = "articles_locales"."_parent_id" and "articles_locales"."_locale" = $1
+  5959 |       65 |    0.01 |             1 | select count(*) from "articles" where "articles"."category_id" = $1
+  3813 |       63 |    0.02 |             3 | select "id", "alt", "url", "filename", "width", "height" from "media" "media" where "media"."id" in ($1, $2, $3) order by "media"."created_at" desc
+  4304 |       62 |    0.01 |             1 | select "id", "alt", "url", "filename", "width", "height" from "media" "media" where "media"."id" in ($1) order by "media"."created_at" desc
+  1852 |       61 |    0.03 |             2 | select "categories"."id", "categories"."slug", "categories"."updated_at", "categories"."created_at", "categories__locales"."data" as "_locales" from "categories
+  1382 |       23 |    0.02 |             4 | select "id", "alt", "url", "filename", "width", "height" from "media" "media" where "media"."id" in ($1, $2, $3, $4) order by "media"."created_at" desc
+  1141 |       21 |    0.02 |             6 | select "id", "alt", "url", "filename", "width", "height" from "media" "media" where "media"."id" in ($1, $2, $3, $4, $5, $6) order by "media"."created_at" desc
+(15 rows)
+

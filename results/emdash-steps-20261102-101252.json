@@ -1,0 +1,46 @@
+{
+  "testid": "emdash-steps-20261102-101252",
+  "cms": "emdash",
+  "profile": "steps",
+  "target": "http://emdash:3000",
+  "finishedAt": "2026-11-02T08:25:25.560Z",
+  "durationS": 752,
+  "requests": 82394,
+  "rps": 109.6,
+  "errorRate": 0,
+  "droppedIterations": 2505,
+  "maxVUs": 400,
+  "latencyMs": {
+    "all": {
+      "p50": 31,
+      "p95": 3929,
+      "p99": 4353,
+      "max": 5074
+    },
+    "article": {
+      "p50": 21,
+      "p95": 1293,
+      "p99": 1459,
+      "max": 1866
+    },
+    "category": {
+      "p50": 44,
+      "p95": 4308,
+      "p99": 4793,
+      "max": 5074
+    },
+    "home": {
+      "p50": 44,
+      "p95": 3138,
+      "p99": 3568,
+      "max": 3826
+    },
+    "search": {
+      "p50": 27,
+      "p95": 2498,
+      "p99": 2796,
+      "max": 3220
+    }
+  },
+  "thresholdsPassed": false
+}

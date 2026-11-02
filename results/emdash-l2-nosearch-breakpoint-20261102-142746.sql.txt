@@ -1,0 +1,14 @@
+ calls | total_ms | mean_ms | rows_per_call |                                                                              query                                                                               
+-------+----------+---------+---------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    10 |        8 |    0.81 |             1 | insert into "options" ("name", "value", "revision") values ($1, $2, $3) on conflict ("name") do update set "value" = $4, "revision" = $5
+    10 |        1 |    0.08 |             1 | select * from "_emdash_collections" order by coalesce(sort_order, $1) asc, "slug" asc
+    10 |        0 |    0.03 |             0 | SELECT * FROM "ec_articles" WHERE scheduled_at IS NOT NULL AND scheduled_at <= $1 AND deleted_at IS NULL ORDER BY scheduled_at ASC, id ASC LIMIT $2
+    10 |        0 |    0.02 |             1 | SELECT ( SELECT state FROM _emdash_media_usage_activation WHERE task_key = $1 ) AS media_state, ( SELECT id FROM _emdash_transfer_operations WHERE kind = $2 AND
+    10 |        0 |    0.02 |             0 | select "value", "revision" from "options" where "name" = $1
+    10 |        0 |    0.01 |             0 | select "value" from "options" where "name" = $1
+    10 |        0 |    0.01 |             1 | SELECT MIN(next_run_at) as next FROM _emdash_cron_tasks WHERE status = $1 AND enabled = $2
+     1 |        0 |    0.08 |             1 | SELECT pg_stat_statements_reset()
+    10 |        0 |    0.01 |             0 | UPDATE _emdash_cron_tasks SET status = $3, locked_at = $1 WHERE id IN ( SELECT id FROM _emdash_cron_tasks WHERE next_run_at <= $2 AND status = $4 AND enabled = 
+    10 |        0 |    0.01 |             0 | UPDATE _emdash_cron_tasks SET status = $2, locked_at = $3 WHERE status = $4 AND locked_at < $1
+(10 rows)
+

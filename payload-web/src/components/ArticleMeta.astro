@@ -1,0 +1,22 @@
+---
+import { formatDate, t, type Locale } from "../lib/i18n";
+
+interface Props {
+	locale: Locale;
+	date: string;
+	readingTime?: number | null;
+}
+
+const { locale, date, readingTime } = Astro.props;
+---
+
+<div class="meta">
+	<time datetime={date}>{formatDate(locale, date)}</time>
+	{
+		readingTime ? (
+			<span class="reading-time">
+				{readingTime} {t(locale).minutes}
+			</span>
+		) : null
+	}
+</div>

@@ -1,0 +1,36 @@
+---
+import { mediaUrl, type ArticleEntry } from "../lib/data";
+import type { Locale } from "../lib/i18n";
+import ArticleMeta from "./ArticleMeta.astro";
+
+interface Props {
+	locale: Locale;
+	article: ArticleEntry;
+}
+
+const { locale, article } = Astro.props;
+const { data } = article;
+const href = `/${locale}/articles/${data.slug}`;
+const cover = data.cover;
+const coverSrc = mediaUrl(cover);
+---
+
+<article class="card">
+	<a href={href} class="poster" tabindex="-1">
+		{
+			coverSrc ? (
+				// Plain <img>: no image optimizer in the request path while benchmarking.
+				<img src={coverSrc} alt={cover?.alt} width={cover?.width} height={cover?.height} />
+			) : (
+				<span class="poster-placeholder">{data.terms?.category?.[0]?.label ?? ""}</span>
+			)
+		}
+	</a>
+	<div class="intro">
+		<h3>
+			<a href={href}>{data.title}</a>
+		</h3>
+		{data.excerpt && <p>{data.excerpt}</p>}
+		<ArticleMeta locale={locale} date={data.date} readingTime={data.reading_time} />
+	</div>
+</article>

@@ -1,0 +1,13 @@
+global:
+  scrape_interval: 5s
+  evaluation_interval: 5s
+
+# k6 pushes its metrics via remote write (--web.enable-remote-write-receiver).
+scrape_configs:
+  - job_name: containers
+    static_configs:
+      - targets: ["docker-exporter:9417"]
+
+  - job_name: postgres
+    static_configs:
+      - targets: ["postgres-exporter:9187"]
