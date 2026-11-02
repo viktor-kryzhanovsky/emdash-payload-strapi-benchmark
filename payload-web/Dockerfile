@@ -20,7 +20,9 @@ COPY payload/src /app/payload/src
 # bare imports inside payload/src resolve against this project's node_modules
 RUN ln -s /app/payload-web/node_modules /app/payload/node_modules
 COPY payload-web/ ./
-RUN pnpm run build
+# CMS_CACHE=page enables the route cache in astro.config (baked into the build)
+ARG CMS_CACHE=off
+RUN CMS_CACHE=$CMS_CACHE pnpm run build
 
 FROM base AS runner
 ENV NODE_ENV=production

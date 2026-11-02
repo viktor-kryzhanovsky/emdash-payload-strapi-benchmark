@@ -1,0 +1,12 @@
+ calls | total_ms | mean_ms | rows_per_call |                                                                              query                                                                               
+-------+----------+---------+---------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+   228 |       36 |    0.16 |             3 | select "articles"."id", "articles"."slug", "articles"."cover_id", "articles"."date", "articles"."category_id", "articles__locales"."data" as "_locales" from "ar
+   114 |        9 |    0.08 |             1 | select "menu"."id", "menu"."updated_at", "menu"."created_at", "menu_items"."data" as "items" from "menu" "menu" left join lateral (select coalesce(json_agg(json
+   228 |        8 |    0.04 |             1 | select "categories"."id", "categories"."slug", "categories__locales"."data" as "_locales" from "categories" "categories" left join lateral (select coalesce(json
+   228 |        5 |    0.02 |             3 | select "id", "alt", "url", "filename", "width", "height" from "media" "media" where "media"."id" in ($1, $2, $3) order by "media"."created_at" desc
+   114 |        5 |    0.04 |             2 | select "categories"."id", "categories"."slug", "categories__locales"."data" as "_locales" from "categories" "categories" left join lateral (select coalesce(json
+   114 |        4 |    0.04 |             2 | select "categories"."id", "categories"."slug", "categories"."updated_at", "categories"."created_at", "categories__locales"."data" as "_locales" from "categories
+   228 |        3 |    0.01 |             1 | select count(*) from "articles" where "articles"."category_id" = $1
+     1 |        0 |    0.09 |             1 | SELECT pg_stat_statements_reset()
+(8 rows)
+

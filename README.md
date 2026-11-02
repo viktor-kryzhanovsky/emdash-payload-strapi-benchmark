@@ -9,7 +9,7 @@ the same budget of **1 vCPU / 2 GB**, measured without cache and with two cache 
 | Ceiling on 1 vCPU (p95 < 500 ms) | No cache | Data cache (L1) | Page cache (L2) |
 |---|---|---|---|
 | Payload 3.92 + Next 16 | ~95 RPS | ~145 RPS | ~400 RPS |
-| Payload 3.92 + Astro 7 (Local API, no Next) | ~155 RPS | ~540 RPS | — |
+| Payload 3.92 + Astro 7 (Local API, no Next) | ~155 RPS | ~540 RPS | ~1000 RPS |
 | EmDash 1.4 (Astro 7) | ~155 RPS | ~430 RPS | ~1250 RPS |
 | Strapi 5.60 + Astro 7 (REST) | ~57 RPS | — | — |
 
@@ -120,7 +120,7 @@ p95 < 500 ms, p99 < 1500 ms; breakpoint runs abort on it.
 |---|---|---|---|
 | Payload + Next | `PAYLOAD_CACHE` | `off`, `data` (`unstable_cache` + `revalidateTag` in hooks), `page` (full route cache, `app/(cached)` + rewrites) | `data`: restart; `page`: rebuild |
 | EmDash | `EMDASH_CACHE` | `off`, `data` (`objectCache: memoryCache()`), `page` (Astro route cache + cache hints) | rebuild (baked into the build) |
-| Payload + Astro | `PAYLOAD_WEB_CACHE` | `off`, `data` (in-process cache; Payload hooks call a webhook) | restart; Payload needs `PAYLOAD_REVALIDATE_URL=http://payload-web:3000/api/revalidate` |
+| Payload + Astro | `PAYLOAD_WEB_CACHE` | `off`, `data` (in-process cache), `page` (Astro route cache, document tags); Payload hooks call a webhook | `data`: restart; `page`: rebuild; Payload needs `PAYLOAD_REVALIDATE_URL=http://payload-web:3000/api/revalidate` |
 
 ```bash
 PAYLOAD_CACHE=page docker compose up -d --build --wait payload

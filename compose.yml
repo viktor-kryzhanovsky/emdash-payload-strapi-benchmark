@@ -116,11 +116,15 @@ services:
     build:
       context: .
       dockerfile: payload-web/Dockerfile
+      args:
+        # page mode needs a rebuild (route cache in astro.config); data mode is runtime only
+        CMS_CACHE: ${PAYLOAD_WEB_CACHE:-off}
     environment:
       DATABASE_URL: postgres://payload:payload@postgres:5432/payload_bench
       DATABASE_POOL_MAX: 10
       PAYLOAD_SECRET: bench-only-secret
-      # off | data (Local API results cached in this process; invalidated by the payload hooks' webhook)
+      # off | data (Local API results cached in this process) | page (route cache, needs a rebuild);
+      # both invalidated by the payload hooks' webhook
       CMS_CACHE: ${PAYLOAD_WEB_CACHE:-off}
       REVALIDATE_SECRET: bench-only-revalidate
     ports:

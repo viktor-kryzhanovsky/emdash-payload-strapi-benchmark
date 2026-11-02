@@ -1,6 +1,6 @@
 import type { CollectionConfig } from 'payload'
 
-import { revalidateCollection, TAGS } from '@/lib/revalidate'
+import { articleDocTags, revalidateCollection, TAGS } from '@/lib/revalidate'
 
 type LexicalNode = { text?: string; children?: LexicalNode[] }
 
@@ -16,8 +16,8 @@ export const Articles: CollectionConfig = {
   },
   defaultSort: '-date',
   hooks: {
-    afterChange: [revalidateCollection(TAGS.articles)],
-    afterDelete: [revalidateCollection(TAGS.articles)],
+    afterChange: [revalidateCollection(TAGS.articles, articleDocTags)],
+    afterDelete: [revalidateCollection(TAGS.articles, articleDocTags)],
   },
   access: {
     read: () => true,

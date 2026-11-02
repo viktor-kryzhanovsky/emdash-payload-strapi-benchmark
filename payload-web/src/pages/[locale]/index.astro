@@ -2,6 +2,7 @@
 import ArticleCard from "../../components/ArticleCard.astro";
 import Base from "../../layouts/Base.astro";
 import { getCategories, getMenu, listArticles } from "@/lib/data";
+import { articleTag, cachePage, categoryTag } from "../../lib/cache";
 import { isLocale, t } from "../../lib/i18n";
 
 const { locale } = Astro.params;
@@ -17,6 +18,10 @@ const sections = (
 		})),
 	)
 ).filter((s) => s.articles.length > 0);
+cachePage(Astro.cache, [
+	...categories.map((c) => categoryTag(c.id)),
+	...sections.flatMap((s) => s.articles.map((a) => articleTag(a.id))),
+]);
 ---
 
 <Base locale={locale} menu={menu}>

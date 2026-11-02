@@ -22,8 +22,8 @@ random locale. SLO: errors < 1 %, p95 < 500 ms, p99 < 1500 ms. `VACUUM ANALYZE` 
 |---|---|---|---|
 | No cache | ~95 RPS | ~150–165 RPS (Postgres-bound) | ~57 RPS |
 | L1, data cache | ~145 RPS (Payload + Astro: ~540 RPS) | ~430 RPS (stale-cache race under load, see below) | not measured¹ |
-| L2, page cache, full mix (search uncached) | ~400 RPS | ~1250 RPS | not measured¹ |
-| L2, cached pages only | ~900 RPS | ≥ 2600 RPS | not measured¹ |
+| L2, page cache, full mix (search uncached) | ~400 RPS (Payload + Astro: ~1000 RPS) | ~1250 RPS | not measured¹ |
+| L2, cached pages only | ~900 RPS (Payload + Astro: ≥ 2800 RPS) | ≥ 2600 RPS | not measured¹ |
 | Invalidation under load, median (L1 / L2) | 0.14–0.3 s / 0.7–0.9 s | 0.15–0.23 s / 0.14–0.22 s | — |
 
 Payload without Next (Astro pages calling the same Local API in-process, see below): **~155 RPS** without cache,
@@ -135,8 +135,27 @@ the tags to `payload-web` (`REVALIDATE_URL` → `/api/revalidate`, shared secret
   needed here. In EmDash the epoch is bumped synchronously with 100–600 ms of transaction still ahead.
 - With caching, both Astro sites are bound by rendering plus the uncached search; Payload's search (Local API)
   is cheaper than the EmDash site's (raw SQL + a collection query with hydration).
-- L2 (page cache) was not measured: cached pages are served by Astro's route cache alone, so it would repeat
-  the EmDash L2 numbers (~1250 RPS full mix, ≥ 2600 RPS cached pages only).
+
+### With the page cache (L2)
+
+`PAYLOAD_WEB_CACHE=page` (build time): Astro route cache as on the EmDash site; the webhook also purges the route
+cache (`cache.invalidate({ tags })`). Search and 404 are not cached.
+
+| | Payload + Astro L2 | EmDash L2 | Payload + Next L2 |
+|---|---|---|---|
+| **Ceiling, full mix** | **~1000 RPS** (search breaks: p95 245 ms at 970, 693 ms at 1110 RPS) | ~1250 RPS | ~400 RPS |
+| **Ceiling, cached pages only** | **≥ 2800 RPS** (p95 103 ms, CPU 0.95) | ≥ 2600 RPS | ~900 RPS |
+| Invalidation at 500 / 600 / 200 RPS, median | 130–170 ms | 140–220 ms | 0.7–0.9 s |
+| Stale pages | 0 of 15 | 0 of 15 | 0 of 15 |
+
+**Tag granularity matters under load.** The first version tagged every page with the collection tags
+(`articles`, …), so each edit emptied the whole cache: at 600 RPS every request then missed at once and re-rendered
+(~6.7 ms each, i.e. ~4 cores of work on 1 core). Pages answered in 2–4 s, invalidation took 2.3–3.4 s and 1 of 15
+pages stayed stale (a render started before the write finished after the purge). Astro's route cache does not
+collapse concurrent misses for the same URL. EmDash's cache hints name the entries on the page, so it purges only
+those. With document tags (`article:<id>`, `category:<id>`, sent by the Payload hook) an edit purges the article,
+its category's pages and the home page; at 500 RPS p95 stayed at 51 ms, 0 of 15 stale
+(`REVALIDATE_REPEAT_MS=500` as a safety net for in-flight renders).
 
 ## Strapi + Astro (no cache)
 
@@ -228,7 +247,9 @@ Invalidation under load (50 % of the full-mix ceiling, 15 trials):
   `strapi-pages-soak-20261102-154704`, `strapi-data-soak-20261102-155026`
 - Payload + Astro: `payload-web-breakpoint-20261102-165243`, `payload-web-pages-soak-20261102-165858`,
   `payload-web-data-soak-20261102-170220`, `payload-web-l1-breakpoint-20261102-171756`,
-  `payload-web-l1-inv-soak-20261102-172828`, `payload-web-l1-inv-repeat-soak-20261102-173401`
+  `payload-web-l1-inv-soak-20261102-172828`, `payload-web-l1-inv-repeat-soak-20261102-173401`,
+  `payload-web-l2-breakpoint-20261102-183116`, `payload-web-l2-nosearch-breakpoint-20261102-184150`,
+  `payload-web-l2-inv-soak-20261102-185223` (collection tags), `payload-web-l2-inv-tags-soak-20261102-191030`
 - Payload: `payload-breakpoint-20261102-001945`, `payload-steps-20261102-005913`, `payload-soak-20261102-011216`,
   `payload-pages-soak-20261102-003737`, `payload-data-soak-20261102-004059`, `payload-4w-breakpoint-20261102-004905`
 - EmDash: `emdash-breakpoint-20261102-040732`, `emdash-steps-20261102-101252`, `emdash-soak-20261102-102556`,

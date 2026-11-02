@@ -1,7 +1,7 @@
 import { fileURLToPath } from "node:url";
 
 import node from "@astrojs/node";
-import { defineConfig } from "astro/config";
+import { defineConfig, memoryCache } from "astro/config";
 
 // Astro frontend for Payload: the pages call the Payload Local API in this process, through the very
 // same payload/src/lib/data.ts as the Next site (no HTTP, no Next/React rendering). The Payload admin
@@ -25,6 +25,8 @@ export default defineConfig({
 			prefixDefaultLocale: true,
 		},
 	},
+	// CMS_CACHE=page (build time): Astro route cache, see src/lib/cache.ts.
+	...(process.env.CMS_CACHE === "page" ? { cache: { provider: memoryCache() } } : {}),
 	devToolbar: { enabled: false },
 	vite: {
 		resolve: {
